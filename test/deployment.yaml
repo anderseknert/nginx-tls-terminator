@@ -1,17 +1,4 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-nginx-tls-terminator
-spec:
-  selector:
-    app: test-nginx-tls-terminator
-  ports:
-  - name: https
-    protocol: TCP
-    port: 443
-    targetPort: 8443
----
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: test-nginx-tls-terminator
@@ -40,6 +27,6 @@ spec:
           name: tls-terminator-cert
           readOnly: true
       volumes:
-      - name:
-          secret: tls-terminator-cert
+      - name: tls-terminator-cert
+        secret:
           secretName: tls-terminator-cert
