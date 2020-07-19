@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-nginx-tls-terminator
+  name: nginx-tls-terminator
   labels:
-    app: test-nginx-tls-terminator
+    app: nginx-tls-terminator
 spec:
   selector:
     matchLabels:
-      app: test-nginx-tls-terminator
+      app: nginx-tls-terminator
   template:
     metadata:
       labels:
-        app: test-nginx-tls-terminator
+        app: nginx-tls-terminator
     spec:
       containers:
       - name: nginx
@@ -19,7 +19,7 @@ spec:
         ports:
         - containerPort: 80
       - name: nginx-tls-terminator
-        image: nginx-tls-terminator:latest
+        image: eknert/nginx-tls-terminator:latest
         ports:
         - containerPort: 8443
         volumeMounts:
