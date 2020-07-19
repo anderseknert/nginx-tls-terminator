@@ -31,11 +31,19 @@ k wait pods -l app=nginx-tls-terminator --for=condition=Ready --timeout=90s
 
 nginx_pod=$(k get pod -l app=nginx-tls-terminator -o name)
 
+echo "nginx_pod=${nginx_pod}"
+echo "k cp "${DIR}"/cert/tls.crt ${nginx_pod:4}:/tmp -c nginx"
+
 k cp "${DIR}"/cert/tls.crt "${nginx_pod:4}:/tmp" -c nginx
+
+echo "before exec"
+
 k exec "${nginx_pod}" -c nginx -- curl \
     --fail -s -o /dev/null -I -w "%{http_code}" \
     --cacert /tmp/tls.crt \
     https://nginx-tls-terminator.default.svc.cluster.local
+
+echo "done, cleaning up"
 
 # Cleanup
 kind delete cluster --name "${test_cluster_name}"
