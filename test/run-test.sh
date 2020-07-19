@@ -42,4 +42,4 @@ echo
 echo "Done, cleaning up"
 
 # Cleanup
-kind delete cluster --name "${test_cluster_name}"
+#kind delete cluster --name "${test_cluster_name}"

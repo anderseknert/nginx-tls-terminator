@@ -87,6 +87,36 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
     runAsGroup: 2000
 ```
 
+### Configuring service
+
+The TLS terminating sidecar container should now be up and running, proxying TLS encrypted requests on port 8443 to port 80 on the main container. As the pods are normally exposed through a kubernetes service, we'll need to make it route traffic to our sidecar container for TLS traffic. Given an existing service looking something like this:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: my-awesome-app
+spec:
+  clusterIP: 10.108.119.63
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: my-awesome-app
+```
+
+All we'll need to do is to add handling to the port we configured for our sidecar (8443) - we'll also normally want to expose this on the regular HTTPS port, 443:
+
+```yaml
+- name: https
+  port: 443
+  protocol: TCP
+  targetPort: 8443
+```
+
 ### Kustomize
 
 TBD
