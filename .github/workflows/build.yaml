@@ -6,10 +6,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: brpaz/hadolint-action@master
-    - uses: ludeeus/action-shellcheck@master
-    - uses: docker/build-push-action@v1
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Hadolint Dockerfile
+      uses: brpaz/hadolint-action@master
+    - name: Shellcheck
+      uses: ludeeus/action-shellcheck@master
+    - name: Run e2e test
+      run: test/run-test.sh
+    - name: Docker build and push
+      uses: docker/build-push-action@v1
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
