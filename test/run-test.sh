@@ -32,7 +32,7 @@ k wait pods -l app=nginx-tls-terminator --for=condition=Ready --timeout=90s
 nginx_pod=$(k get pod -l app=nginx-tls-terminator -o name)
 
 echo "nginx_pod=${nginx_pod}"
-echo "k cp "${DIR}"/cert/tls.crt ${nginx_pod:4}:/tmp -c nginx"
+echo "k cp ${DIR}/cert/tls.crt ${nginx_pod:4}:/tmp -c nginx"
 
 k cp "${DIR}"/cert/tls.crt "${nginx_pod:4}:/tmp" -c nginx
 
