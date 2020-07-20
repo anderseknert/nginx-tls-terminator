@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ignored
+  name: my-awesome-app
 spec:
   template:
     spec:
@@ -10,6 +10,9 @@ spec:
         image: eknert/nginx-tls-terminator:latest
         ports:
         - containerPort: 8443
+        envFrom:
+        - configMapRef:
+            name: tls-terminator-conf
         volumeMounts:
         - mountPath: "/etc/nginx/ssl"
           name: tls-terminator-cert

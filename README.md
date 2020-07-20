@@ -85,6 +85,48 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
     runAsGroup: 2000
 ```
 
+### Kustomize
+
+Repeating the above steps for multiple deployments is bound to be time consuming. We can both structure and simplify the process with the help of [kustomize](https://kustomize.io/). An example kustomization file to create both config, secrets and the actual sidecar overlay could look something like below:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Point to deployment to be patched with the TLS terminating sidecar
+resources:
+- deployment.yaml
+
+configMapGenerator:
+- name: tls-terminator-conf
+  behavior: create
+  literals:
+  - PROXY_LISTEN_PORT=8443
+  - PROXY_UPSTREAM_PORT=80
+
+secretGenerator:
+- name: tls-terminator-cert
+  files:
+  - cert/tls.crt
+  - cert/tls.key
+  type: kubernetes.io/tls
+
+patchesStrategicMerge:
+- volume.yaml
+- sidecar.yaml
+```
+
+Patching the deployment with the sidecar and any other needed resources is now as easy as:
+
+```shell
+$ kubectl apply -k kustomize/
+configmap/tls-terminator-conf-d8f8ffgbg7 created
+secret/tls-terminator-cert-76bkgtmk95 created
+deployment.apps/my-awesome-app created
+```
+
+See the [kustomize](kustomize/) directory for the full example.
+
 ### Configuring service
 
 The TLS terminating sidecar container should now be up and running, proxying TLS encrypted requests on port 8443 to port 80 on the main container. As the pods are normally exposed through a kubernetes service, we'll need to make it route traffic to our sidecar container for TLS traffic. Given an existing service looking something like this:

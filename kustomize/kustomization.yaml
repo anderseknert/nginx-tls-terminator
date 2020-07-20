@@ -1,8 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Point to deployment to be patched with the TLS terminating sidecar
 resources:
 - deployment.yaml
+
+configMapGenerator:
+- name: tls-terminator-conf
+  behavior: create
+  literals:
+  - PROXY_LISTEN_PORT=8443
+  - PROXY_UPSTREAM_PORT=80
 
 secretGenerator:
 - name: tls-terminator-cert
@@ -11,13 +19,6 @@ secretGenerator:
   - cert/tls.key
   type: kubernetes.io/tls
 
-# See https://github.com/kubernetes-sigs/kustomize/blob/master/examples/patchMultipleObjects.md
-patches:
-- path: volume.yaml
-  target:
-    kind: Deployment
-    annotationSelector: nginx-tls-terminator-sidecar=true
-- path: sidecar.yaml
-  target:
-    kind: Deployment
-    annotationSelector: nginx-tls-terminator-sidecar=true
+patchesStrategicMerge:
+- volume.yaml
+- sidecar.yaml
