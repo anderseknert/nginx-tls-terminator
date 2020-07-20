@@ -4,9 +4,7 @@
 
 Single-purpose TLS terminating nginx proxy.
 
-Primary function is to run as a sidecar container in kubernetes pods where the app running in the main container either does not support TLS, or it's inconvenient to add it - such as for legacy apps or where the code is not under your control.
-
-Another common use case is when TLS is terminated by the ingress controller
+Primary function is to run as a sidecar container in kubernetes pods where the app running in the main container either does not support TLS, or it's inconvenient to add it - such as for legacy apps or where the code is not under your control. Another common use case is when external traffic has TLS terminated by the ingress controller but some internal services need to reach the same services from the inside on the same URL. One example of this is the issuer URL provided in OAuth2 and OpenID Connect, where both external and internal applications will need to query the same endpoints over a secure channel.
 
 Features:
 * Small single-purpose container at ~9 MB with minimal configuration needed.
