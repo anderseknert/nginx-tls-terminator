@@ -156,7 +156,3 @@ All we'll need to do is to add handling to the port we configured for our sideca
   protocol: TCP
   targetPort: 8443
 ```
-
-### Kustomize
-
-TBD
