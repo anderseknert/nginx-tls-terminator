@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ignored
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx-tls-terminator
+        image: eknert/nginx-tls-terminator:latest
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - mountPath: "/etc/nginx/ssl"
+          name: tls-terminator-cert
+          readOnly: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 2000
+          runAsGroup: 2000

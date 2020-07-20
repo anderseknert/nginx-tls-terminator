@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+
+secretGenerator:
+- name: tls-terminator-cert
+  files:
+  - cert/tls.crt
+  - cert/tls.key
+  type: kubernetes.io/tls
+
+# See https://github.com/kubernetes-sigs/kustomize/blob/master/examples/patchMultipleObjects.md
+patches:
+- path: volume.yaml
+  target:
+    kind: Deployment
+    annotationSelector: nginx-tls-terminator-sidecar=true
+- path: sidecar.yaml
+  target:
+    kind: Deployment
+    annotationSelector: nginx-tls-terminator-sidecar=true

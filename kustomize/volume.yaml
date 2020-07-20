@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ignored
+spec:
+  template:
+    spec:
+      volumes:
+      - name: tls-terminator-cert
+        secret:
+          secretName: tls-terminator-cert
