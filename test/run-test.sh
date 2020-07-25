@@ -9,6 +9,8 @@
 
 set -eu -o pipefail
 
+set -x
+
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 test_cluster_name=nginx-tls-terminator-test
@@ -42,4 +44,4 @@ echo
 echo "Done, cleaning up"
 
 # Cleanup
-#kind delete cluster --name "${test_cluster_name}"
+kind delete cluster --name "${test_cluster_name}"
