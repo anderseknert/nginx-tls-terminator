@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-nginx-tls-terminator
+spec:
+  selector:
+    app: test-nginx-tls-terminator
+  ports:
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 8443
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: test-nginx-tls-terminator
+  labels:
+    app: test-nginx-tls-terminator
+spec:
+  selector:
+    matchLabels:
+      app: test-nginx-tls-terminator
+  template:
+    metadata:
+      labels:
+        app: test-nginx-tls-terminator
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.0-alpine
+        ports:
+        - containerPort: 80
+      - name: nginx-tls-terminator
+        image: nginx-tls-terminator:latest
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - mountPath: "/etc/nginx/ssl"
+          name: tls-terminator-cert
+          readOnly: true
+      volumes:
+      - name:
+          secret: tls-terminator-cert
+          secretName: tls-terminator-cert

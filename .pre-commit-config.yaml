@@ -3,6 +3,8 @@ repos:
   rev: v2.3.0
   hooks:
   - id: check-yaml
+    args:
+    - --allow-multiple-documents
   - id: check-json
   - id: end-of-file-fixer
   - id: mixed-line-ending
