@@ -36,7 +36,7 @@ nginx_pod=$(k get pod -l app=nginx-tls-terminator -o name)
 k cp "${DIR}"/cert/tls.crt "${nginx_pod:4}:/tmp" -c nginx
 
 k exec "${nginx_pod}" -c nginx -- curl \
-    --fail -s -o /dev/null -I -w "%{http_code}" \
+    -v -s -o /dev/null -I -w "%{http_code}" \
     --cacert /tmp/tls.crt \
     https://nginx-tls-terminator.default.svc.cluster.local
 
