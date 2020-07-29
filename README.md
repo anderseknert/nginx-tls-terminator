@@ -83,6 +83,11 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
     runAsNonRoot: true
     runAsUser: 2000
     runAsGroup: 2000
+  env:
+  - name: PROXY_LISTEN_PORT
+    value: "1234" # OPTIONAL: Defaults to 8443
+  - name: PROXY_UPSTREAM_PORT
+    value: "80"   # OPTIONAL: Default to 8080
 ```
 
 ### Kustomize

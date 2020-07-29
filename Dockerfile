@@ -1,7 +1,7 @@
 FROM nginx:1.19.1-alpine
 
 ENV PROXY_LISTEN_PORT 8443
-ENV PROXY_UPSTREAM_PORT 80
+ENV PROXY_UPSTREAM_PORT 8080
 
 COPY conf/nginx.conf             /etc/nginx/
 COPY conf/server.conf.template   /etc/nginx/templates/

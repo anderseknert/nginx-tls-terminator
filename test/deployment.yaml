@@ -26,6 +26,9 @@ spec:
         - mountPath: "/etc/nginx/ssl"
           name: tls-terminator-cert
           readOnly: true
+        env:
+        - name: PROXY_UPSTREAM_PORT
+          value: "80"
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
