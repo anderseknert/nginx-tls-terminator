@@ -9,6 +9,7 @@ Primary function is to run as a sidecar container in kubernetes pods where the a
 Features:
 * Small single-purpose container at ~9 MB with minimal configuration needed.
 * Does not require root privileges and runs as non-root user by default. Runs with strictest `securityContext` configured on container.
+* Running with a read-only root filesystem as easy as mounting a volume on `/tmp`.
 * Exposed TLS port as well as target upstream port configurable through environment variables.
 
 ## Usage instructions
@@ -52,6 +53,12 @@ spec:
       labels:
         app: my-awesome-app
     spec:
+      volumes:
+      - name: tls-terminator-cert
+        secret:
+          secretName: tls-terminator-cert
+      - name: tmp
+        emptyDir: {}
       containers:
       - name: my-awesome-app-container
         image: my-awesome-app:1.2.3
@@ -75,14 +82,17 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
   ports:
   - containerPort: 8443
   volumeMounts:
-  - mountPath: "/etc/nginx/ssl"
+  - mountPath: /etc/nginx/ssl
     name: tls-terminator-cert
     readOnly: true
+  - mountPath: /tmp
+    name: tmp
   securityContext:
     allowPrivilegeEscalation: false
     runAsNonRoot: true
     runAsUser: 2000
     runAsGroup: 2000
+    readOnlyRootFilesystem: true
   env:
   - name: PROXY_LISTEN_PORT
     value: "1234" # OPTIONAL: Defaults to 8443
