@@ -6,6 +6,8 @@ spec:
   template:
     spec:
       volumes:
+      - name: tmp
+        emptyDir: {}
       - name: tls-terminator-cert
         secret:
           secretName: tls-terminator-cert

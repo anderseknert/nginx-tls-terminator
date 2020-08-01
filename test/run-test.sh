@@ -13,9 +13,12 @@ set -x
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+docker build -f "${DIR}/../Dockerfile" -t eknert/nginx-tls-terminator-test:latest "${DIR}/../"
+
 test_cluster_name=nginx-tls-terminator-test
 
-kind create cluster --name="${test_cluster_name}"
+kind create cluster --name="${test_cluster_name}" --wait 5m
+kind load docker-image eknert/nginx-tls-terminator-test:latest --name nginx-tls-terminator-test
 
 k() {
     kubectl --context kind-${test_cluster_name} "$@"
@@ -26,7 +29,7 @@ k create service clusterip nginx-tls-terminator --tcp=443:8443
 k apply -f "${DIR}"/deployment.yaml
 
 # Wait some time for the pods to be created..
-sleep 20
+sleep 30
 
 # ..and even more time for them to be ready
 k wait pods -l app=nginx-tls-terminator --for=condition=Ready --timeout=90s
@@ -44,4 +47,4 @@ echo
 echo "Done, cleaning up"
 
 # Cleanup
-kind delete cluster --name "${test_cluster_name}"
+#kind delete cluster --name "${test_cluster_name}"

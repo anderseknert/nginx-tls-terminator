@@ -36,10 +36,14 @@ spec:
         ports:
         - containerPort: 8443
         volumeMounts:
-        - mountPath: "/etc/nginx/ssl"
+        - mountPath: /etc/nginx/ssl
           name: tls-terminator-cert
           readOnly: true
+        - mountPath: /tmp
+          name: tmp
       volumes:
       - name:
           secret: tls-terminator-cert
           secretName: tls-terminator-cert
+      - name: tmp
+        emptyDir: {}
