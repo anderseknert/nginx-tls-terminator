@@ -19,10 +19,9 @@ spec:
         ports:
         - containerPort: 80
       - name: nginx-tls-terminator
-        image: eknert/nginx-tls-terminator-test:latest
+        image: eknert/nginx-tls-terminator:test
         ports:
         - containerPort: 8443
-        imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/nginx/ssl
           name: tls-terminator-cert

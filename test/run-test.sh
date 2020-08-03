@@ -13,12 +13,12 @@ set -x
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-docker build -f "${DIR}/../Dockerfile" -t eknert/nginx-tls-terminator-test:latest "${DIR}/../"
+docker build -f "${DIR}/../Dockerfile" -t eknert/nginx-tls-terminator:test "${DIR}/../"
 
 test_cluster_name=nginx-tls-terminator-test
 
 kind create cluster --name="${test_cluster_name}" --wait 5m
-kind load docker-image eknert/nginx-tls-terminator-test:latest --name nginx-tls-terminator-test
+kind load docker-image eknert/nginx-tls-terminator:test --name nginx-tls-terminator-test
 
 k() {
     kubectl --context kind-${test_cluster_name} "$@"
@@ -46,5 +46,4 @@ k exec "${nginx_pod}" -c nginx -- curl \
 echo
 echo "Done, cleaning up"
 
-# Cleanup
-#kind delete cluster --name "${test_cluster_name}"
+kind delete cluster --name "${test_cluster_name}"
