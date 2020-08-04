@@ -93,6 +93,9 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
     runAsUser: 2000
     runAsGroup: 2000
     readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+      - all
   env:
   - name: PROXY_LISTEN_PORT
     value: "1234" # OPTIONAL: Defaults to 8443
