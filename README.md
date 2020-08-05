@@ -2,15 +2,23 @@
 
 ![build](https://github.com/anderseknert/nginx-tls-terminator/workflows/build/badge.svg)
 
-Single-purpose TLS terminating nginx proxy.
+**Single-purpose TLS terminating nginx proxy.**
 
-Primary function is to run as a sidecar container in kubernetes pods where the app running in the main container either does not support TLS, or it's inconvenient to add it - such as for legacy apps or where the code is not under your control. Another common use case is when external traffic has TLS terminated by the ingress controller but some internal services need to reach the same services from the inside on the same URL. One example of this is the issuer URL provided in OAuth2 and OpenID Connect, where both external and internal applications will need to query the same endpoints over a secure channel.
+Primary function is to run as a sidecar container in kubernetes pods where the app running in the main container either does not support TLS, or it's inconvenient to add it - such as for legacy apps or where the code is not under your control. Another common use case is when external traffic has TLS terminated by the ingress controller, but some internal services need to reach the same services from the inside on the same URL. One example of this is the issuer URL provided in OAuth2 and OpenID Connect, where both external and internal applications will need to query the same endpoints over a secure channel.
 
-Features:
+**Features:**
 * Small single-purpose container at ~9 MB with minimal configuration needed.
-* Does not require root privileges and runs as non-root user by default. Runs with strictest `securityContext` configured on container.
+* Does not require root privileges and runs as non-root user by default. Runs with strictest `securityContext` configured on the container.
 * Running with a read-only root filesystem as easy as mounting a volume on `/tmp`.
 * Exposed TLS port as well as target upstream port configurable through environment variables.
+
+## Configuration options
+
+| Option              | Default               | Description                                                                                     |
+|---------------------|-----------------------|-------------------------------------------------------------------------------------------------|
+| PROXY_LISTEN_PORT   | 8443                  | Port to listen to for incoming HTTPS requests.                                                  |
+| PROXY_UPSTREAM_PORT | 8080                  | Port to forward HTTP traffic to within pod.                                                     |
+| ACCESS_LOG_LOCATION | /tmp/nginx.access.log | Location of access log. Use /dev/stdout to log to console, or /dev/null to discard access logs. |
 
 ## Usage instructions
 
@@ -78,7 +86,7 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
 
 ```yaml
 - name: nginx-tls-terminator
-  image: eknert/nginx-tls-terminator:0.3.0
+  image: eknert/nginx-tls-terminator:0.5.0
   ports:
   - containerPort: 8443
   volumeMounts:
@@ -102,6 +110,8 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
   - name: PROXY_UPSTREAM_PORT
     value: "80"   # OPTIONAL: Default to 8080
 ```
+
+For all available versions/tags, see [Docker Hub](https://hub.docker.com/r/eknert/nginx-tls-terminator).
 
 ### Kustomize
 

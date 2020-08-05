@@ -3,6 +3,7 @@ FROM nginx:1.19.1-alpine
 ENV NGINX_ENVSUBST_OUTPUT_DIR /tmp
 ENV PROXY_LISTEN_PORT 8443
 ENV PROXY_UPSTREAM_PORT 8080
+ENV ACCESS_LOG_LOCATION /tmp/nginx.access.log
 
 COPY conf/nginx.conf             /etc/nginx/
 COPY conf/server.conf.template   /etc/nginx/templates/
