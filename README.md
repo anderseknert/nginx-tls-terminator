@@ -86,7 +86,7 @@ Then, add the nginx-tls-terminator sidecar container mounting the secret volume 
 
 ```yaml
 - name: nginx-tls-terminator
-  image: eknert/nginx-tls-terminator:1.0.0
+  image: eknert/nginx-tls-terminator:1.0.1
   ports:
   - containerPort: 8443
   volumeMounts:
