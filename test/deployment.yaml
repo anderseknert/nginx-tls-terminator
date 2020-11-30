@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.19.0-alpine
+        image: nginx:1.19.5-alpine
         ports:
         - containerPort: 80
       - name: nginx-tls-terminator
