@@ -1,4 +1,4 @@
-FROM nginx:1.19.5-alpine
+FROM nginx:1.21.1-alpine
 
 ENV NGINX_ENVSUBST_OUTPUT_DIR /tmp
 ENV PROXY_LISTEN_PORT 8443
